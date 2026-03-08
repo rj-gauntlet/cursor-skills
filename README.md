@@ -19,19 +19,19 @@ Or manually:
 
 ```bash
 # Clone the repo and copy just the skill you want
-git clone https://github.com/YOUR_USERNAME/cursor-skills.git /tmp/cursor-skills
+git clone https://github.com/rj-gauntlet/cursor-skills.git /tmp/cursor-skills
 cp -r /tmp/cursor-skills/SKILL_NAME ~/.cursor/skills/
 rm -rf /tmp/cursor-skills
 ```
 
 ```powershell
 # PowerShell equivalent
-git clone https://github.com/YOUR_USERNAME/cursor-skills.git $env:TEMP\cursor-skills
+git clone https://github.com/rj-gauntlet/cursor-skills.git $env:TEMP\cursor-skills
 Copy-Item -Recurse "$env:TEMP\cursor-skills\SKILL_NAME" "$HOME\.cursor\skills\"
 Remove-Item -Recurse -Force "$env:TEMP\cursor-skills"
 ```
 
-Replace `YOUR_USERNAME` with the GitHub username and `SKILL_NAME` with the skill folder name.
+Replace `rj-gauntlet` with the GitHub username and `SKILL_NAME` with the skill folder name.
 
 ## Adding New Skills
 

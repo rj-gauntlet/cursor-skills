@@ -17,21 +17,21 @@ Copy the `presearch` folder into your Cursor skills directory:
 
 **PowerShell:**
 ```powershell
-git clone https://github.com/YOUR_USERNAME/cursor-skills.git $env:TEMP\cursor-skills
+git clone https://github.com/rj-gauntlet/cursor-skills.git $env:TEMP\cursor-skills
 Copy-Item -Recurse "$env:TEMP\cursor-skills\presearch" "$HOME\.cursor\skills\"
 Remove-Item -Recurse -Force "$env:TEMP\cursor-skills"
 ```
 
 **Bash:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/cursor-skills.git /tmp/cursor-skills
+git clone https://github.com/rj-gauntlet/cursor-skills.git /tmp/cursor-skills
 cp -r /tmp/cursor-skills/presearch ~/.cursor/skills/
 rm -rf /tmp/cursor-skills
 ```
 
 **Or with degit (no full clone needed):**
 ```bash
-npx degit YOUR_USERNAME/cursor-skills/presearch ~/.cursor/skills/presearch
+npx degit rj-gauntlet/cursor-skills/presearch ~/.cursor/skills/presearch
 ```
 
 ## Usage
