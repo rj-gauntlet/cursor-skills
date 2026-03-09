@@ -1,6 +1,6 @@
 # Cursor Skills
 
-Personal collection of [Cursor](https://cursor.sh) agent skills — a full pipeline from product requirements to production deployment.
+Personal collection of [Cursor](https://cursor.sh) agent skills — a full pipeline from product requirements to production deployment, plus standalone tools for UI design.
 
 ## Pipeline
 
@@ -11,13 +11,21 @@ Presearch → Implement → Review → Test/QA → Ship
 
 ## Available Skills
 
+### Pipeline Skills
+
 | Skill | Description |
 |-------|-------------|
 | [presearch](presearch/) | Ingest a PRD and collaboratively build architecture, strategy, implementation plan, cost analysis, and phased schedule. |
 | [implement](implement/) | Take a PROJECT_PLAN.md and systematically build working code, phase by phase, with tests and progress tracking. |
 | [review](review/) | Verify implemented code against the plan — requirements coverage, architecture, code quality. |
-| [test-qa](test-qa/) | Run scaled testing (smoke, integration, E2E, security, performance) based on project stakes. |
+| [test-qa](test-qa/) | Run scaled testing (smoke, integration, E2E, visual UI, security, performance) based on project stakes. |
 | [ship](ship/) | Deploy to production — CI/CD setup, hosting config, pre-deploy checks, and release notes. |
+
+### Standalone Skills
+
+| Skill | Description |
+|-------|-------------|
+| [stunner](stunner/) | Transform a working app into a visually stunning product. Mockup-driven — shows you visual designs for approval before writing any code. |
 
 ## Pipeline Artifacts
 
@@ -31,6 +39,8 @@ Each skill produces artifacts that feed into the next:
 | `REVIEW_REPORT.md` | review | test-qa, ship |
 | `TEST_REPORT.md` | test-qa | ship |
 | `RELEASE.md` | ship | — |
+| `DESIGN_SYSTEM.md` | stunner | — |
+| `UI_CHANGELOG.md` | stunner | — |
 
 ## Installing a Skill
 
