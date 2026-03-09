@@ -1,6 +1,6 @@
 ---
 name: stunner
-description: Transform a functionally complete project into a visually stunning application. Generates mockup images for approval before writing any code. Works with any frontend framework. Use when the user wants to improve the UI, make the app look better, redesign the interface, add visual polish, create a design system, or make the UI a show-stopper.
+description: Transform a functionally complete project into a visually stunning application. Creates HTML/CSS prototype mockups for approval before writing any code. Works with any frontend framework. Use when the user wants to improve the UI, make the app look better, redesign the interface, add visual polish, create a design system, or make the UI a show-stopper.
 ---
 
 # Stunner — Make It Beautiful
@@ -10,6 +10,18 @@ Take a functionally complete project and transform its UI into something visuall
 ## Philosophy
 
 Show, don't tell. The user sees visual mockups before any code changes. Iterate on the visuals until they're excited. Only then implement.
+
+## Mockup Method
+
+All mockups are built as **standalone HTML/CSS prototypes** — not generated images. Each mockup is a single HTML file with inline CSS, opened in the browser and screenshotted for the user.
+
+Why this approach:
+- **Fast** — generating HTML/CSS is near-instant vs. slow image generation
+- **Pixel-perfect** — real fonts, real spacing, real colors, crisp text
+- **Iterable** — tweak a color or font size and re-screenshot, no full regeneration
+- **Reusable** — the prototype code informs the final implementation directly
+
+Save mockup files to a `stunner-mockups/` directory in the project. Name them descriptively (e.g., `direction-bold-vibrant.html`, `page-dashboard.html`).
 
 ## Trigger
 
@@ -32,7 +44,7 @@ Present the audit summary and page list to the user. Confirm which pages/compone
 
 ### Phase 2: Aesthetic Direction
 
-Present **5-6 visual directions** as mockup images of the app's most important screen. Use the GenerateImage tool to create each mockup.
+Present **5-6 visual directions** as HTML/CSS prototype mockups of the app's most important screen.
 
 Always include these core directions:
 
@@ -53,10 +65,12 @@ Plus **2-3 out-of-the-box ideas** tailored to the specific product. These should
 
 Choose the out-of-the-box options based on what would actually work for the product type. A developer tool might get "retro terminal." A consumer app might get "illustrated/playful." Don't just pick randomly.
 
-**Each mockup image should show:**
-- The app's main screen fully designed in that direction
-- Real-ish content (not lorem ipsum)
-- Enough detail to feel the vibe — typography, colors, spacing, component style
+**For each direction:**
+1. Create a standalone HTML file with inline CSS that renders the app's main screen in that aesthetic
+2. Use Google Fonts (via CDN link) for typography. Use real CSS for shadows, gradients, border radius, spacing.
+3. Include realistic content — not lorem ipsum
+4. Open each in the browser using browser automation and screenshot it
+5. Save the HTML file to `stunner-mockups/direction-[name].html`
 
 **Present all directions and ask the user to react:**
 - Pick one
@@ -64,7 +78,7 @@ Choose the out-of-the-box options based on what would actually work for the prod
 - Ask for variations ("like B but warmer")
 - Reject all and describe what they want instead
 
-**Iterate until the user is satisfied with the direction.** No limit on rounds. Generate revised mockups incorporating feedback each time.
+**Iterate until the user is satisfied with the direction.** No limit on rounds. Modify the HTML/CSS prototype and re-screenshot — this is fast since it's just code changes, not image regeneration.
 
 ### Phase 3: Brand Vibe
 
@@ -72,7 +86,7 @@ Once the aesthetic direction is locked:
 
 1. **Suggest a brand personality** — 3-5 adjectives that capture the vibe (e.g., "confident, modern, energetic, approachable")
 2. **App name typography** — suggest how the app name should be styled (font, weight, treatment)
-3. **Favicon concept** — describe or generate a simple favicon that fits the aesthetic
+3. **Favicon concept** — describe a simple favicon that fits the aesthetic, or create one as an SVG
 4. **Color naming** — give the palette colors meaningful names that reinforce the brand (not "blue-500" but "electric," "midnight," "ember")
 5. **Voice alignment** — suggest whether UI copy should be formal, casual, playful, technical, etc.
 
@@ -123,18 +137,22 @@ Present the design system to the user for approval.
 
 For **every page** in the scope list from Phase 1:
 
-1. **Generate a mockup image** showing the page fully redesigned using the approved design system
-2. **Present it to the user**
-3. **Iterate** based on feedback — "make the hero bigger," "I don't like the sidebar here," "can we try a different layout for the cards"
+1. **Create an HTML/CSS prototype** of the page fully redesigned using the approved design system. Save to `stunner-mockups/page-[name].html`.
+2. **Open in browser and screenshot** — present to the user
+3. **Iterate** based on feedback — "make the hero bigger," "I don't like the sidebar here," "can we try a different layout for the cards." Edits are fast — modify the HTML/CSS and re-screenshot.
 4. **No limit on rounds** — keep iterating until the user is satisfied with that page
 
 Move to the next page only when the current one is approved.
 
-**Mockup quality guidelines:**
-- Show realistic content, not placeholders
+**Prototype quality guidelines:**
+- Use realistic content, not placeholders
 - Include the navigation/chrome so it feels like a real app
-- Show the page at desktop resolution primarily
-- If the user asks, generate mobile viewport mockups too
+- Load the design system's fonts via Google Fonts CDN
+- Match the design system's exact color values, spacing scale, and shadow system
+- Show the page at desktop resolution (1440px) primarily
+- If the user asks, resize the browser viewport and screenshot at mobile/tablet widths too
+
+**Shared stylesheet:** After the design system is approved in Phase 4, create a `stunner-mockups/shared-styles.css` with all the design tokens as CSS custom properties. Each page prototype links to this file, ensuring consistency and making iteration even faster (change a token once, all pages update).
 
 After all pages are individually approved, present the **full set side by side** as a final consistency check. The user should feel like they're looking at a cohesive product, not a collection of unrelated pages.
 
@@ -147,7 +165,7 @@ Now write the code. For each page:
 3. **Add component states** — hover, focus, active, disabled, loading, empty, error
 4. **Add animations** — entrance animations, hover effects, transitions between states
 5. **Open in browser** — use browser automation to view the live result
-6. **Screenshot and compare** to the approved mockup
+6. **Screenshot and compare** to the approved mockup prototype
 7. **Adjust** until the live version matches the mockup
 8. **Present to the user** — show the before (from Phase 1) and after side by side
 
