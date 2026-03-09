@@ -1,12 +1,36 @@
 # Cursor Skills
 
-Personal collection of [Cursor](https://cursor.sh) agent skills.
+Personal collection of [Cursor](https://cursor.sh) agent skills — a full pipeline from product requirements to production deployment.
+
+## Pipeline
+
+```
+Presearch → Implement → Review → Test/QA → Ship
+   PRD        Plan       Code     Verified    Live
+```
 
 ## Available Skills
 
 | Skill | Description |
 |-------|-------------|
 | [presearch](presearch/) | Ingest a PRD and collaboratively build architecture, strategy, implementation plan, cost analysis, and phased schedule. |
+| [implement](implement/) | Take a PROJECT_PLAN.md and systematically build working code, phase by phase, with tests and progress tracking. |
+| [review](review/) | Verify implemented code against the plan — requirements coverage, architecture, code quality. |
+| [test-qa](test-qa/) | Run scaled testing (smoke, integration, E2E, security, performance) based on project stakes. |
+| [ship](ship/) | Deploy to production — CI/CD setup, hosting config, pre-deploy checks, and release notes. |
+
+## Pipeline Artifacts
+
+Each skill produces artifacts that feed into the next:
+
+| Artifact | Produced by | Consumed by |
+|----------|-------------|-------------|
+| `PROJECT_PLAN.md` | presearch | implement, review, test-qa |
+| `IMPLEMENTATION_LOG.md` | implement | review |
+| `BUILD_MANIFEST.md` | implement | review, test-qa, ship |
+| `REVIEW_REPORT.md` | review | test-qa, ship |
+| `TEST_REPORT.md` | test-qa | ship |
+| `RELEASE.md` | ship | — |
 
 ## Installing a Skill
 
@@ -31,7 +55,7 @@ Copy-Item -Recurse "$env:TEMP\cursor-skills\SKILL_NAME" "$HOME\.cursor\skills\"
 Remove-Item -Recurse -Force "$env:TEMP\cursor-skills"
 ```
 
-Replace `rj-gauntlet` with the GitHub username and `SKILL_NAME` with the skill folder name.
+Replace `SKILL_NAME` with the skill folder name (e.g., `presearch`, `implement`, `review`, `test-qa`, `ship`). Install them individually or grab the whole repo for the full pipeline.
 
 ## Adding New Skills
 

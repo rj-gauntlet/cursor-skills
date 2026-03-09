@@ -89,6 +89,18 @@ Use this template when generating the final `PROJECT_PLAN.md`. Replace all brack
 | Database | [tech] | [why] |
 | Hosting | [tech] | [why] |
 
+### Detected Stack Constraints
+[If an existing project was detected, list the language, framework, and dependencies that constrained recommendations. If greenfield, state "Greenfield — no existing constraints."]
+
+### Shared Interfaces
+
+Types, utilities, or contracts that multiple features depend on. These determine build order — features listed as dependents cannot start until the interface is created.
+
+| Interface | Location | Purpose | Depended on by |
+|-----------|----------|---------|----------------|
+| [Type/utility name] | [file path] | [what it defines] | [Feature 1, Feature 3] |
+| [Type/utility name] | [file path] | [what it defines] | [Feature 2, Feature 4, Feature 5] |
+
 ---
 
 ## 4. Strategy
