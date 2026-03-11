@@ -5,8 +5,8 @@ Personal collection of [Cursor](https://cursor.sh) agent skills — a full pipel
 ## Pipeline
 
 ```
-Presearch → Implement → Review → Test/QA → Ship
-   PRD        Plan       Code     Verified    Live
+PRD Generator → Presearch → Implement → Review → Test/QA → Ship
+    Idea           PRD        Plan       Code     Verified    Live
 ```
 
 ## Available Skills
@@ -15,6 +15,7 @@ Presearch → Implement → Review → Test/QA → Ship
 
 | Skill | Description |
 |-------|-------------|
+| [prd-generator](prd-generator/) | Turn a rough idea into a structured PRD through guided conversation with market research and proactive feature suggestions. |
 | [presearch](presearch/) | Ingest a PRD and collaboratively build architecture, strategy, implementation plan, cost analysis, and phased schedule. |
 | [implement](implement/) | Take a PROJECT_PLAN.md and systematically build working code, phase by phase, with tests and progress tracking. |
 | [review](review/) | Verify implemented code against the plan — requirements coverage, architecture, code quality. |
@@ -34,6 +35,7 @@ Each skill produces artifacts that feed into the next:
 
 | Artifact | Produced by | Consumed by |
 |----------|-------------|-------------|
+| `PRD.md` | prd-generator | presearch |
 | `PROJECT_PLAN.md` | presearch | implement, review, test-qa |
 | `IMPLEMENTATION_LOG.md` | implement | review |
 | `BUILD_MANIFEST.md` | implement | review, test-qa, ship |
