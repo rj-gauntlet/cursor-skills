@@ -25,6 +25,7 @@ Presearch → Implement → Review → Test/QA → Ship
 
 | Skill | Description |
 |-------|-------------|
+| [dashboard](dashboard/) | Generate a live interactive HTML dashboard from pipeline artifacts — progress, phases, tasks, requirements, app status. Auto-called by pipeline skills. |
 | [stunner](stunner/) | Transform a working app into a visually stunning product. Mockup-driven — shows you visual designs for approval before writing any code. |
 
 ## Pipeline Artifacts
@@ -39,6 +40,7 @@ Each skill produces artifacts that feed into the next:
 | `REVIEW_REPORT.md` | review | test-qa, ship |
 | `TEST_REPORT.md` | test-qa | ship |
 | `RELEASE.md` | ship | — |
+| `DASHBOARD.html` | dashboard | — (opened in browser) |
 | `DESIGN_SYSTEM.md` | stunner | — |
 | `UI_CHANGELOG.md` | stunner | — |
 

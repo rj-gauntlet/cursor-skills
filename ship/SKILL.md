@@ -93,7 +93,8 @@ If deployment fails, diagnose the error and help fix it.
 
 ### Step 7: Post-Deploy
 
-1. **Generate release notes** — `RELEASE.md` summarizing what was shipped:
+1. **Regenerate `DASHBOARD.html`** — run the dashboard skill silently to show the shipped state with production URL live.
+2. **Generate release notes** — `RELEASE.md` summarizing what was shipped:
 
 ```markdown
 # Release — [version or date]
@@ -116,8 +117,8 @@ If deployment fails, diagnose the error and help fix it.
 - **Plan:** PROJECT_PLAN.md
 ```
 
-2. **Update `PROJECT_PLAN.md`** — mark the overall status as shipped with the deployment date.
-3. **Suggest monitoring** — recommend logging, error tracking, and uptime monitoring tools appropriate for the stack and stakes level.
+3. **Update `PROJECT_PLAN.md`** — mark the overall status as shipped with the deployment date.
+4. **Suggest monitoring** — recommend logging, error tracking, and uptime monitoring tools appropriate for the stack and stakes level.
 
 ## Interaction Guidelines
 

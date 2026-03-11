@@ -92,6 +92,7 @@ Present a phase completion summary:
    ```
 2. **Append to `IMPLEMENTATION_LOG.md`** — log the phase results (see Output Artifacts below).
 3. **Commit to git** with message: `feat: complete Phase N — [phase name]`
+4. **Regenerate `DASHBOARD.html`** — run the dashboard skill silently to update the project dashboard with current progress.
 
 #### Step 7: Checkpoint (standard mode only)
 

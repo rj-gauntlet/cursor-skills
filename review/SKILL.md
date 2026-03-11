@@ -74,7 +74,7 @@ For each phase's success criteria in the plan:
 
 ### Step 7: Produce Review Report
 
-Generate `REVIEW_REPORT.md` and save to the project root.
+Generate `REVIEW_REPORT.md` and save to the project root. Then regenerate `DASHBOARD.html` by running the dashboard skill silently to reflect the review results.
 
 ```markdown
 # Review Report

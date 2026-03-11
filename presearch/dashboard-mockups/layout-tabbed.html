@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Dashboard — Tabbed Layout</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #0f1117;
+    --bg-card: #1a1d27;
+    --bg-card-hover: #1f2230;
+    --bg-input: #252836;
+    --border: #2a2d3a;
+    --text-primary: #e8eaed;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --accent-green: #34d399;
+    --accent-green-bg: rgba(52, 211, 153, 0.12);
+    --accent-amber: #fbbf24;
+    --accent-amber-bg: rgba(251, 191, 36, 0.12);
+    --accent-red: #f87171;
+    --accent-red-bg: rgba(248, 113, 113, 0.12);
+    --accent-blue: #60a5fa;
+    --accent-blue-bg: rgba(96, 165, 250, 0.12);
+    --accent-purple: #a78bfa;
+    --accent-purple-bg: rgba(167, 139, 250, 0.12);
+    --accent-gray: #4b5563;
+    --accent-gray-bg: rgba(75, 85, 99, 0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .header-left { display: flex; align-items: center; gap: 20px; }
+  .project-name { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+  .project-desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .app-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-card);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .status-dot.up { background: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
+  .status-dot.down { background: var(--accent-red); box-shadow: 0 0 6px var(--accent-red); }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .launch-btn {
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .launch-btn.running { background: var(--accent-gray); }
+
+  /* ===== PIPELINE + STATS BAR ===== */
+  .sticky-bar {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .pipeline-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .pipeline-step.done { background: var(--accent-green-bg); color: var(--accent-green); }
+  .pipeline-step.active { background: var(--accent-amber-bg); color: var(--accent-amber); }
+  .pipeline-step.pending { color: var(--text-muted); }
+  .pipeline-arrow { color: var(--text-muted); font-size: 14px; margin: 0 6px; }
+  .stats {
+    display: flex;
+    gap: 24px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-value { font-size: 22px; font-weight: 800; color: var(--accent-green); }
+  .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .tab {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--text-secondary); }
+  .tab.active {
+    color: var(--accent-blue);
+    border-bottom-color: var(--accent-blue);
+  }
+  .tab-badge {
+    background: var(--accent-red-bg);
+    color: var(--accent-red);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 100px;
+    margin-left: 6px;
+    font-weight: 700;
+  }
+
+  /* ===== TAB CONTENT ===== */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ===== PHASES (reused styles) ===== */
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card:last-child { margin-bottom: 0; }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .phase-card {
+    background: var(--bg-input);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .phase-card:last-child { margin-bottom: 0; }
+  .phase-card.active { border-color: var(--accent-amber); }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .phase-name { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .phase-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 16px; }
+  .progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-primary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+  .progress-bar-fill.green { background: var(--accent-green); }
+  .progress-bar-fill.amber { background: var(--accent-amber); }
+  .progress-bar-fill.gray { background: var(--accent-gray); }
+  .task-list { list-style: none; }
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .task-check { font-size: 14px; }
+  .task-check.done { color: var(--accent-green); }
+  .task-check.progress { color: var(--accent-amber); }
+  .task-check.blocked { color: var(--accent-red); }
+  .task-check.pending { color: var(--text-muted); }
+  .task-item.done { text-decoration: line-through; color: var(--text-muted); }
+  .chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: auto;
+  }
+  .chip-done { background: var(--accent-green-bg); color: var(--accent-green); }
+  .chip-progress { background: var(--accent-amber-bg); color: var(--accent-amber); }
+  .chip-blocked { background: var(--accent-red-bg); color: var(--accent-red); }
+  .chip-deviation { background: var(--accent-purple-bg); color: var(--accent-purple); }
+
+  /* ===== REQUIREMENTS ===== */
+  .req-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .req-group-card {
+    background: var(--bg-input);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+  }
+  .req-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .req-group-name { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .req-group-count { font-size: 12px; color: var(--text-muted); }
+  .req-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--bg-primary);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .req-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .req-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .req-item.done .req-dot { background: var(--accent-green); }
+  .req-item.progress .req-dot { background: var(--accent-amber); }
+  .req-item.pending .req-dot { background: var(--text-muted); }
+  .req-item.done { color: var(--text-muted); text-decoration: line-through; }
+
+  /* ===== ARTIFACTS ===== */
+  .artifacts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .artifact-card {
+    background: var(--bg-input);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .artifact-card:hover { background: var(--bg-card-hover); }
+  .artifact-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+  .artifact-icon.exists { color: var(--accent-green); }
+  .artifact-icon.missing { color: var(--text-muted); }
+  .artifact-name { font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); }
+  .artifact-status { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ===== ACTIVITY ===== */
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--bg-input);
+    font-size: 13px;
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; min-width: 70px; }
+  .activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .activity-text { color: var(--text-secondary); }
+  .activity-text strong { color: var(--text-primary); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div>
+      <div class="project-name">FinTrack</div>
+      <div class="project-desc">Personal finance dashboard with AI-powered insights</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="app-status">
+      <div class="status-dot up"></div>
+      <span style="font-weight:600;">Local</span>
+      <span style="color:var(--text-muted)">:3000</span>
+    </div>
+    <div class="app-status">
+      <div class="status-dot down"></div>
+      <span style="font-weight:600;">Prod</span>
+    </div>
+    <button class="launch-btn running">● Running</button>
+  </div>
+</div>
+
+<!-- STICKY PIPELINE + STATS BAR -->
+<div class="sticky-bar">
+  <div class="pipeline">
+    <div class="pipeline-step done">✓ Presearch</div>
+    <span class="pipeline-arrow">→</span>
+    <div class="pipeline-step active">● Implement</div>
+    <span class="pipeline-arrow">→</span>
+    <div class="pipeline-step pending">○ Review</div>
+    <span class="pipeline-arrow">→</span>
+    <div class="pipeline-step pending">○ Test/QA</div>
+    <span class="pipeline-arrow">→</span>
+    <div class="pipeline-step pending">○ Ship</div>
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">42%</div>
+      <div class="stat-label">Complete</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--accent-amber)">8</div>
+      <div class="stat-label">Tasks Left</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--accent-blue)">7d</div>
+      <div class="stat-label">Elapsed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--accent-purple)">~8d</div>
+      <div class="stat-label">Remaining</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('phases')">Phases</div>
+  <div class="tab" onclick="switchTab('requirements')">Requirements</div>
+  <div class="tab" onclick="switchTab('artifacts')">Artifacts</div>
+  <div class="tab" onclick="switchTab('activity')">Activity <span class="tab-badge">3</span></div>
+</div>
+
+<!-- TAB: PHASES -->
+<div id="tab-phases" class="tab-content active">
+
+  <!-- Phase 1: Done -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-name"><span style="color:var(--accent-green)">✓</span> Phase 1: Foundation & Setup</div>
+      <div class="phase-meta"><span>5/5 tasks</span><span>3 days (est. 3d)</span></div>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill green" style="width:100%"></div></div>
+    <ul class="task-list">
+      <li class="task-item done"><span class="task-check done">✓</span> Scaffold Next.js project with TypeScript</li>
+      <li class="task-item done"><span class="task-check done">✓</span> Configure Prisma with PostgreSQL</li>
+      <li class="task-item done"><span class="task-check done">✓</span> Set up authentication with NextAuth</li>
+      <li class="task-item done"><span class="task-check done">✓</span> Create shared types and interfaces</li>
+      <li class="task-item done"><span class="task-check done">✓</span> Deploy database migrations</li>
+    </ul>
+  </div>
+
+  <!-- Phase 2: Active -->
+  <div class="phase-card active">
+    <div class="phase-header">
+      <div class="phase-name"><span style="color:var(--accent-amber)">●</span> Phase 2: Core Features</div>
+      <div class="phase-meta"><span>3/7 tasks</span><span>4 days (est. 5d)</span></div>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill amber" style="width:43%"></div></div>
+    <ul class="task-list">
+      <li class="task-item done"><span class="task-check done">✓</span> Transaction CRUD API</li>
+      <li class="task-item done"><span class="task-check done">✓</span> Account linking with Plaid</li>
+      <li class="task-item done"><span class="task-check done">✓</span> Category management <span class="chip chip-deviation">deviation</span></li>
+      <li class="task-item"><span class="task-check progress">◐</span> Dashboard summary view <span class="chip chip-progress">in progress</span></li>
+      <li class="task-item"><span class="task-check blocked">✕</span> Budget creation flow <span class="chip chip-blocked">blocked</span></li>
+      <li class="task-item"><span class="task-check pending">○</span> Recurring transaction detection</li>
+      <li class="task-item"><span class="task-check pending">○</span> Data export (CSV/PDF)</li>
+    </ul>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-name"><span style="color:var(--text-muted)">○</span> Phase 3: AI Insights & Alerts</div>
+      <div class="phase-meta"><span>0/5 tasks</span><span>est. 4d</span></div>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill gray" style="width:0%"></div></div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-name"><span style="color:var(--text-muted)">○</span> Phase 4: Polish & Optimization</div>
+      <div class="phase-meta"><span>0/4 tasks</span><span>est. 3d</span></div>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill gray" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- TAB: REQUIREMENTS -->
+<div id="tab-requirements" class="tab-content">
+  <div class="req-grid">
+
+    <div class="req-group-card">
+      <div class="req-group-header">
+        <div class="req-group-name" style="color:var(--accent-red);">◆ Must-Have</div>
+        <div class="req-group-count">5/8</div>
+      </div>
+      <div class="req-progress-bar"><div class="progress-bar-fill green" style="width:62%;height:100%;border-radius:2px;"></div></div>
+      <div class="req-item done"><span class="req-dot"></span> User authentication & authorization</div>
+      <div class="req-item done"><span class="req-dot"></span> Bank account linking via Plaid</div>
+      <div class="req-item done"><span class="req-dot"></span> Transaction tracking & categorization</div>
+      <div class="req-item done"><span class="req-dot"></span> Account balance overview</div>
+      <div class="req-item done"><span class="req-dot"></span> Secure data encryption at rest</div>
+      <div class="req-item progress"><span class="req-dot" style="background:var(--accent-amber)"></span> Monthly budget creation & tracking</div>
+      <div class="req-item pending"><span class="req-dot"></span> Dashboard with spending summary</div>
+      <div class="req-item pending"><span class="req-dot"></span> Data export (CSV/PDF)</div>
+    </div>
+
+    <div class="req-group-card">
+      <div class="req-group-header">
+        <div class="req-group-name" style="color:var(--accent-amber);">◆ Should-Have</div>
+        <div class="req-group-count">1/4</div>
+      </div>
+      <div class="req-progress-bar"><div class="progress-bar-fill green" style="width:25%;height:100%;border-radius:2px;"></div></div>
+      <div class="req-item done"><span class="req-dot"></span> Transaction search & filters</div>
+      <div class="req-item pending"><span class="req-dot"></span> Recurring transaction detection</div>
+      <div class="req-item pending"><span class="req-dot"></span> Spending trend charts</div>
+      <div class="req-item pending"><span class="req-dot"></span> Email notifications for alerts</div>
+    </div>
+
+    <div class="req-group-card">
+      <div class="req-group-header">
+        <div class="req-group-name" style="color:var(--accent-blue);">◆ Could-Have</div>
+        <div class="req-group-count">0/3</div>
+      </div>
+      <div class="req-progress-bar"><div class="progress-bar-fill green" style="width:0%;height:100%;border-radius:2px;"></div></div>
+      <div class="req-item pending"><span class="req-dot"></span> AI spending insights</div>
+      <div class="req-item pending"><span class="req-dot"></span> Multi-currency support</div>
+      <div class="req-item pending"><span class="req-dot"></span> Receipt photo scanning</div>
+    </div>
+
+    <div class="req-group-card">
+      <div class="req-group-header">
+        <div class="req-group-name" style="color:var(--text-muted);">◆ Won't-Have</div>
+        <div class="req-group-count" style="font-style:italic;">deferred</div>
+      </div>
+      <div class="req-item" style="text-decoration:line-through;color:var(--text-muted);font-size:13px;padding:5px 0;display:flex;align-items:center;gap:8px;"><span class="req-dot" style="background:var(--text-muted);width:6px;height:6px;border-radius:50%;flex-shrink:0;"></span> Stock portfolio tracking</div>
+      <div class="req-item" style="text-decoration:line-through;color:var(--text-muted);font-size:13px;padding:5px 0;display:flex;align-items:center;gap:8px;"><span class="req-dot" style="background:var(--text-muted);width:6px;height:6px;border-radius:50%;flex-shrink:0;"></span> Tax filing integration</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TAB: ARTIFACTS -->
+<div id="tab-artifacts" class="tab-content">
+  <div class="artifacts-grid">
+    <div class="artifact-card">
+      <span class="artifact-icon exists">●</span>
+      <div class="artifact-name">PROJECT_PLAN.md</div>
+      <div class="artifact-status">Updated 2d ago</div>
+    </div>
+    <div class="artifact-card">
+      <span class="artifact-icon exists">●</span>
+      <div class="artifact-name">IMPLEMENTATION_LOG.md</div>
+      <div class="artifact-status">Updated 1h ago</div>
+    </div>
+    <div class="artifact-card">
+      <span class="artifact-icon exists">●</span>
+      <div class="artifact-name">BUILD_MANIFEST.md</div>
+      <div class="artifact-status">Updated 1h ago</div>
+    </div>
+    <div class="artifact-card">
+      <span class="artifact-icon missing">○</span>
+      <div class="artifact-name">REVIEW_REPORT.md</div>
+      <div class="artifact-status">Not created</div>
+    </div>
+    <div class="artifact-card">
+      <span class="artifact-icon missing">○</span>
+      <div class="artifact-name">TEST_REPORT.md</div>
+      <div class="artifact-status">Not created</div>
+    </div>
+    <div class="artifact-card">
+      <span class="artifact-icon missing">○</span>
+      <div class="artifact-name">RELEASE.md</div>
+      <div class="artifact-status">Not created</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: ACTIVITY -->
+<div id="tab-activity" class="tab-content">
+  <div class="card" style="margin-top:0;">
+    <div class="activity-item">
+      <span class="activity-time">12 min ago</span>
+      <span class="activity-dot" style="background:var(--accent-amber)"></span>
+      <span class="activity-text"><strong>Dashboard summary view</strong> — started implementation</span>
+    </div>
+    <div class="activity-item">
+      <span class="activity-time">1 hour ago</span>
+      <span class="activity-dot" style="background:var(--accent-purple)"></span>
+      <span class="activity-text"><strong>Category management</strong> — deviation: switched from flat list to nested tree structure (minor, user approved)</span>
+    </div>
+    <div class="activity-item">
+      <span class="activity-time">2 hours ago</span>
+      <span class="activity-dot" style="background:var(--accent-red)"></span>
+      <span class="activity-text"><strong>Budget creation flow</strong> — blocked: waiting on dashboard summary component</span>
+    </div>
+    <div class="activity-item">
+      <span class="activity-time">3 hours ago</span>
+      <span class="activity-dot" style="background:var(--accent-green)"></span>
+      <span class="activity-text"><strong>Category management</strong> — completed with 12 tests passing</span>
+    </div>
+    <div class="activity-item">
+      <span class="activity-time">Yesterday</span>
+      <span class="activity-dot" style="background:var(--accent-green)"></span>
+      <span class="activity-text"><strong>Phase 1: Foundation & Setup</strong> — completed all 5 tasks in 3 days (on schedule)</span>
+    </div>
+    <div class="activity-item">
+      <span class="activity-time">2 days ago</span>
+      <span class="activity-dot" style="background:var(--accent-blue)"></span>
+      <span class="activity-text"><strong>Presearch</strong> — PROJECT_PLAN.md generated and approved</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.closest('.tab').classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+</script>
+
+</body>
+</html>
