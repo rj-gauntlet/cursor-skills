@@ -87,6 +87,8 @@ Generate `DASHBOARD.html` using the **tabbed layout** with these sections:
 - Project name and description
 - Overall completion percentage (large, prominent)
 - App status indicators (local + production) — **live, via JavaScript ping**
+  - **Local:** show the full URL (e.g., `http://localhost:3000`) next to the status dot. If up, make the URL a clickable link that opens the app.
+  - **Production:** show the full production URL (e.g., `https://fintrack.vercel.app`) next to the status dot. If up, make it a clickable link. If not deployed yet, show "Not deployed".
 - Start command button — copies the start command to clipboard when clicked
 
 ### Pipeline + Stats Bar
@@ -122,30 +124,58 @@ Generate `DASHBOARD.html` using the **tabbed layout** with these sections:
 Include this JavaScript in the generated HTML for real-time app status:
 
 ```javascript
+const LOCAL_URL = 'LOCAL_URL_PLACEHOLDER';
+const PROD_URL = 'PROD_URL_PLACEHOLDER';
+
 async function checkStatus(url, elementId) {
   const dot = document.getElementById(elementId + '-dot');
   const label = document.getElementById(elementId + '-label');
+  const link = document.getElementById(elementId + '-link');
   try {
     await fetch(url, { mode: 'no-cors', cache: 'no-cache' });
     dot.className = 'status-dot up';
     label.textContent = 'Online';
+    if (link) { link.href = url; link.textContent = url; link.style.pointerEvents = 'auto'; }
   } catch {
     dot.className = 'status-dot down';
     label.textContent = 'Offline';
+    if (link) { link.textContent = url; link.style.pointerEvents = 'none'; }
   }
 }
 
 function updateStatus() {
-  checkStatus('LOCAL_URL_PLACEHOLDER', 'local');
-  const prodUrl = 'PROD_URL_PLACEHOLDER';
-  if (prodUrl !== 'none') checkStatus(prodUrl, 'prod');
+  checkStatus(LOCAL_URL, 'local');
+  if (PROD_URL !== 'none') {
+    checkStatus(PROD_URL, 'prod');
+  } else {
+    document.getElementById('prod-label').textContent = 'Not deployed';
+    document.getElementById('prod-link').textContent = '';
+  }
 }
 
 updateStatus();
 setInterval(updateStatus, 5000);
 ```
 
-Replace `LOCAL_URL_PLACEHOLDER` and `PROD_URL_PLACEHOLDER` with actual values from `BUILD_MANIFEST.md`.
+Replace `LOCAL_URL_PLACEHOLDER` and `PROD_URL_PLACEHOLDER` with actual values from `BUILD_MANIFEST.md`. Set `PROD_URL_PLACEHOLDER` to `none` if not deployed.
+
+The header status indicators should use this HTML structure:
+```html
+<div class="app-status">
+  <div id="local-dot" class="status-dot"></div>
+  <div>
+    <div style="font-weight:600;">Local <span id="local-label"></span></div>
+    <a id="local-link" href="#" target="_blank" style="font-size:11px;color:var(--accent-blue);"></a>
+  </div>
+</div>
+<div class="app-status">
+  <div id="prod-dot" class="status-dot"></div>
+  <div>
+    <div style="font-weight:600;">Production <span id="prod-label"></span></div>
+    <a id="prod-link" href="#" target="_blank" style="font-size:11px;color:var(--accent-blue);"></a>
+  </div>
+</div>
+```
 
 ## Start Command Button
 
