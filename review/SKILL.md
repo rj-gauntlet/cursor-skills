@@ -74,7 +74,7 @@ For each phase's success criteria in the plan:
 
 ### Step 7: Produce Review Report
 
-Generate `REVIEW_REPORT.md` and save to the project root. Then regenerate `DASHBOARD.html` by running the dashboard skill silently to reflect the review results.
+Generate `REVIEW_REPORT.md` and save to the project root. Then launch the dashboard skill as a non-blocking subagent to regenerate `DASHBOARD.html` with the review results. Don't wait for it to complete.
 
 ```markdown
 # Review Report

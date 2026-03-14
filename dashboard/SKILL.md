@@ -217,9 +217,13 @@ After generating, inform the user:
 
 ## When Called by Other Skills
 
-When another pipeline skill triggers dashboard regeneration, run silently:
+Pipeline skills should launch dashboard regeneration as a **non-blocking subagent** so it doesn't stall the pipeline. The calling skill should:
+
+1. Launch the dashboard skill as a subagent (fire-and-forget — don't wait for it to complete)
+2. Continue immediately with the next pipeline step
+3. Mention "Dashboard updating" in its checkpoint summary
+
+The subagent will:
 1. Parse all available artifacts
 2. Regenerate `DASHBOARD.html`
-3. No user interaction needed — just update the file
-
-The calling skill should mention "Dashboard updated" in its checkpoint summary.
+3. No user interaction needed — just update the file silently

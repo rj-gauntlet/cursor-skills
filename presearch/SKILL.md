@@ -116,7 +116,7 @@ Once the user is satisfied with the architecture, strategy, schedule, and cost a
    - Full cost tables with scale projections and alternative comparisons
    - Detected stack constraints (if any)
 3. **Save the document** to the project root as `PROJECT_PLAN.md` (or ask the user where they'd like it).
-4. **Regenerate `DASHBOARD.html`** — run the dashboard skill silently to create the initial project dashboard from the new plan.
+4. **Regenerate `DASHBOARD.html`** — launch the dashboard skill as a non-blocking subagent to create the initial project dashboard from the new plan. Don't wait for it to complete.
 5. **Present a summary** of what was created and suggest next steps.
 
 ## Interaction Guidelines

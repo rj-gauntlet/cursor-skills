@@ -159,7 +159,7 @@ Use the non-functional requirements from `BUILD_MANIFEST.md` as the benchmark. I
 
 ### Step 11: Produce Test Report
 
-Generate `TEST_REPORT.md` and save to the project root. Then regenerate `DASHBOARD.html` by running the dashboard skill silently to reflect the test results.
+Generate `TEST_REPORT.md` and save to the project root. Then launch the dashboard skill as a non-blocking subagent to regenerate `DASHBOARD.html` with the test results. Don't wait for it to complete.
 
 ```markdown
 # Test Report

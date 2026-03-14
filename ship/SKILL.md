@@ -93,7 +93,7 @@ If deployment fails, diagnose the error and help fix it.
 
 ### Step 7: Post-Deploy
 
-1. **Regenerate `DASHBOARD.html`** — run the dashboard skill silently to show the shipped state with production URL live.
+1. **Regenerate `DASHBOARD.html`** — launch the dashboard skill as a non-blocking subagent to show the shipped state with production URL live. Don't wait for it to complete.
 2. **Generate release notes** — `RELEASE.md` summarizing what was shipped:
 
 ```markdown
